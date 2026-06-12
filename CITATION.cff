@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the paper below."
+type: software
+title: "Continuous Physics-Informed Representations for Quantum Rotation and Geometric Gates"
+authors:
+  - family-names: Du
+    given-names: Yao
+    affiliation: Shaanxi Normal University
+  - family-names: Cheng
+    given-names: Jian-Jian
+    affiliation: Xi'an University of Posts and Telecommunications
+  - family-names: Zhang
+    given-names: Lin
+    affiliation: Shaanxi Normal University
+  - family-names: Hu
+    given-names: Ming-Liang
+    affiliation: Xi'an University of Posts and Telecommunications
+  - family-names: Wang
+    given-names: Xingang
+    affiliation: Shaanxi Normal University
+repository-code: "https://github.com/username/PINN-quantum-control"
+abstract: >
+  Continuous physics-informed representations for quantum optimal control
+  of single-qubit rotation gates and geometric phase gates. Companion code
+  for the paper "Continuous Physics-Informed Representations for Quantum
+  Rotation and Geometric Gates" (arXiv:xxxx.xxxxx).
+keywords:
+  - quantum optimal control
+  - physics-informed neural network
+  - geometric quantum gates
+  - rotation gates
+  - GRAPE
+license: MIT
+version: 1.0.0

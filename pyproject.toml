@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "pinn-quantum-control"
+version = "1.0.0"
+description = "Continuous physics-informed representations for quantum gate control"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+authors = [
+    {name = "Yao Du"},
+    {name = "Jian-Jian Cheng"},
+    {name = "Lin Zhang"},
+    {name = "Ming-Liang Hu"},
+    {name = "Xingang Wang"},
+]
+keywords = ["quantum control", "PINN", "geometric gates", "GRAPE"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+
+dependencies = [
+    "torch>=2.0",
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "matplotlib>=3.7",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]

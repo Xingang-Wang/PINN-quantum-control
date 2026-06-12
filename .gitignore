@@ -1,0 +1,55 @@
+# PINN-Quantum-Control .gitignore
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# --- PyTorch ---
+*.pt
+*.pth
+*.ckpt
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- Large / regenerable outputs ---
+# Training outputs (can be reproduced by scripts/)
+code/outputs_*/
+results/outputs_*/
+
+# Full-size figures (PNG: regenerated from scripts)
+results/figures/*.png
+
+# GIF animations (large, non-essential)
+*.gif
+
+# Bundle / archive files
+*.zip
+*.tar.gz
+qoc_prx_bundle*/
+
+# Working directories not for publication
+literature/
+chatgpt_code/
+backups/
+revision-notes-*/
+
+# Old / exploratory code variants (keep only refined versions)
+code/animate_*.py
+!code/animate_suppmovie*.py
