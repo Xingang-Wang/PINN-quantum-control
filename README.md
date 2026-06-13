@@ -26,18 +26,30 @@ For the geometric gate, the PINN with turn-weighted loss achieves $\varepsilon_{
 
 ```
 PINN-quantum-control/
-├── src/                    Core modules (PINN framework, GRAPE baseline, RK4 validation)
-├── scripts/                One-command reproduction scripts
-├── data/                   Pre-computed results (metrics, controls, time series)
+├── src/                        Core modules
+│   ├── pinn_dual_control_yz.py         PINN framework (network, loss, Bloch dynamics)
+│   ├── experiment_general_gates.py     Rotation-gate sweep (allocation law, Fig. 3–5)
+│   ├── experiment_general_gates_minimal.py  Minimal-constraint sweep (time law, Fig. 6)
+│   ├── experiment_probe_dla_universal.py    Probe-count law (Fig. 7)
+│   ├── pinn_geometric_Z_gate_turn_weighted.py  Geometric gate with turn-weighted loss
+│   ├── compute_pinn_rk4_E.py           Independent RK4 validation
+│   ├── compute_geometric_phase.py      Geometric-phase decomposition
+│   └── grape/                          GRAPE baselines (L-BFGS-B)
+├── scripts/                    Figure & animation generation
+│   ├── generate_all_figures.py         Generate all paper figures → figures/
+│   ├── make_method_overview.py         Method overview figure
+│   ├── animate_suppmovie1_rotation_gates.py   Supplemental Movie S1
+│   └── animate_suppmovie2_geometric_path.py   Supplemental Movie S2
+├── data/                       Pre-computed results (metrics, controls)
 │   ├── rotation_gates/
 │   └── geometric_gate/
-├── figures/                Final figure PDFs (as in the manuscript)
-├── supplementary/          Supplemental Material animations and description
+├── figures/                    Final figure PDFs (as in the manuscript)
+├── supplementary/              Supplemental Material
 │   ├── Movie_S1_rotation_gate_trajectories.mp4
 │   ├── Movie_S2_geometric_gate_path_dynamics.mp4
 │   └── supplemental_description.md
-├── manuscript/             LaTeX source
-└── pyproject.toml          Dependencies
+├── manuscript/                 LaTeX source
+└── pyproject.toml              Dependencies
 ```
 
 ---
@@ -58,13 +70,35 @@ Dependencies: Python ≥ 3.9, PyTorch ≥ 2.0, NumPy, SciPy, Matplotlib.
 # Generate all figures → figures/
 python scripts/generate_all_figures.py
 
-# Individual experiments
-python scripts/reproduce_rotation_gates.py      # Fig. 2–7
-python scripts/reproduce_geometric_gate.py      # Fig. 8–10
-python scripts/reproduce_grape_baseline.py      # GRAPE comparison data
+# Method overview figure
+python scripts/make_method_overview.py
+
+# Supplemental animations → supplementary/
+python scripts/animate_suppmovie1_rotation_gates.py
+python scripts/animate_suppmovie2_geometric_path.py
 ```
 
-Pre-computed data in `data/` allows figure generation without re-running training. Each script can also run the full optimization from scratch (see `--train` flag).
+### Run experiments
+
+```bash
+# Rotation gates (Fig. 3–5)
+python src/experiment_general_gates.py
+
+# Minimal-constraint rotation gates / time law (Fig. 6)
+python src/experiment_general_gates_minimal.py
+
+# Probe-count law (Fig. 7)
+python src/experiment_probe_dla_universal.py
+
+# Geometric gate with turn-weighted loss
+python src/pinn_geometric_Z_gate_turn_weighted.py
+
+# GRAPE baseline comparison
+python src/grape/experiment_grape_lbfgsb_rewrite.py          # rotation gates
+python src/grape/grape_geometric_Z_gate_baseline.py          # geometric gate
+```
+
+Pre-computed data in `data/` allows figure generation without re-running training.
 
 ---
 
