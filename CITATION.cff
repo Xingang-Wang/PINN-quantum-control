@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this code, please cite the paper below."
 type: software
-title: "Continuous Physics-Informed Representations for Quantum Rotation and Geometric Gates"
+title: "Evolution-Level Quantum Optimal Control of Single-Qubit Gates with Physics-Informed Neural Networks"
 authors:
   - family-names: Du
     given-names: Yao
@@ -18,12 +18,12 @@ authors:
   - family-names: Wang
     given-names: Xingang
     affiliation: Shaanxi Normal University
-repository-code: "https://github.com/username/PINN-quantum-control"
+repository-code: "https://github.com/Xingang-Wang/PINN-quantum-control"
 abstract: >
-  Continuous physics-informed representations for quantum optimal control
-  of single-qubit rotation gates and geometric phase gates. Companion code
-  for the paper "Continuous Physics-Informed Representations for Quantum
-  Rotation and Geometric Gates" (arXiv:xxxx.xxxxx).
+  Evolution-level quantum optimal control of single-qubit gates using
+  physics-informed neural networks. Companion code for the paper
+  "Evolution-Level Quantum Optimal Control of Single-Qubit Gates with
+  Physics-Informed Neural Networks" (arXiv:xxxx.xxxxx).
 keywords:
   - quantum optimal control
   - physics-informed neural network
@@ -31,4 +31,4 @@ keywords:
   - rotation gates
   - GRAPE
 license: MIT
-version: 1.0.0
+version: 2.0.0

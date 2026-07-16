@@ -1,15 +1,15 @@
-# Continuous Physics-Informed Representations for Quantum Rotation and Geometric Gates
+# Evolution-Level Quantum Optimal Control of Single-Qubit Gates with Physics-Informed Neural Networks
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![arXiv](https://img.shields.io/badge/arXiv-xxxx.xxxxx-B31B1B.svg)](https://arxiv.org/abs/xxxx.xxxxx)
 
-Companion code and data for **"Continuous Physics-Informed Representations for Quantum Rotation and Geometric Gates"** ([arXiv:xxxx.xxxxx](https://arxiv.org/abs/xxxx.xxxxx)).
+Companion code and data for **"Evolution-Level Quantum Optimal Control of Single-Qubit Gates with Physics-Informed Neural Networks"** ([arXiv:xxxx.xxxxx](https://arxiv.org/abs/xxxx.xxxxx)).
 
 ---
 
 ## Overview
 
-This repository implements a **continuous physics-informed representation** for single-qubit gate design. Instead of optimizing discrete pulse amplitudes, a neural network generates the control fields, state trajectories, and gate duration as a single differentiable controlled process. The Bloch-equation residual, terminal gate objective, and physical constraints are imposed within a unified loss. The resulting controls are verified by independent time evolution.
+This repository implements an **evolution-level representation** for single-qubit gate design using physics-informed neural networks. Instead of optimizing discrete pulse amplitudes, a neural network generates the control fields, state trajectories, and gate duration as a single differentiable controlled process. The Bloch-equation residual, terminal gate objective, and physical constraints are imposed within a unified loss. The resulting controls are verified by independent time evolution.
 
 We use two settings to expose two levels of structure:
 
@@ -18,7 +18,7 @@ We use two settings to expose two levels of structure:
 | **Rotation gates** ($X$, $Z$, $Y$, intermediate axes) | Endpoint-constrained control: the learned processes recover the expected minimum-time organization of bounded single-qubit control. Gate time, saturated pulse form, and channel division follow target-axis geometry without being prescribed. |
 | **Geometric $Z$ gate** | Path-constrained control: the endpoint map is not sufficient — the reference path must suppress dynamical phase while accumulating geometric phase. The representation identifies rapid control-direction turns as the bottleneck and converts this diagnosis into a training weight that refines the process. |
 
-For the geometric gate, the PINN with turn-weighted loss achieves $\varepsilon_{\rm phase} = 1.3 \times 10^{-4}$ rad (geometric-phase closure error), compared to $4.8 \times 10^{-3}$ rad for a GRAPE-type baseline at matched duration.
+For the geometric gate, the PINN with turn-weighted loss achieves $F_{\rm proc} > 0.999999$ with negligible dynamical phase, and the residual geometricity error is reduced at the turning intervals without rising elsewhere.
 
 ---
 
@@ -28,7 +28,7 @@ For the geometric gate, the PINN with turn-weighted loss achieves $\varepsilon_{
 PINN-quantum-control/
 ├── src/                        Core modules
 │   ├── pinn_dual_control_yz.py         PINN framework (network, loss, Bloch dynamics)
-│   ├── experiment_general_gates.py     Rotation-gate sweep (allocation law, Fig. 3–5)
+│   ├── experiment_general_gates.py     Rotation-gate sweep (control geometry, Fig. 3–5)
 │   ├── experiment_general_gates_minimal.py  Minimal-constraint sweep (time law, Fig. 6)
 │   ├── experiment_probe_dla_universal.py    Probe-count law (Fig. 7)
 │   ├── pinn_geometric_Z_gate_turn_weighted.py  Geometric gate with turn-weighted loss
@@ -37,7 +37,7 @@ PINN-quantum-control/
 │   └── grape/                          GRAPE baselines (L-BFGS-B)
 ├── scripts/                    Figure & animation generation
 │   ├── generate_all_figures.py         Generate all paper figures → figures/
-│   ├── make_method_overview.py         Method overview figure
+│   ├── make_method_overview_loop.py    Method overview figure
 │   ├── animate_suppmovie1_rotation_gates.py   Supplemental Movie S1
 │   └── animate_suppmovie2_geometric_path.py   Supplemental Movie S2
 ├── data/                       Pre-computed results (metrics, controls)
@@ -71,7 +71,7 @@ Dependencies: Python ≥ 3.9, PyTorch ≥ 2.0, NumPy, SciPy, Matplotlib.
 python scripts/generate_all_figures.py
 
 # Method overview figure
-python scripts/make_method_overview.py
+python scripts/make_method_overview_loop.py
 
 # Supplemental animations → supplementary/
 python scripts/animate_suppmovie1_rotation_gates.py
@@ -117,19 +117,20 @@ A full description is in [`supplementary/supplemental_description.md`](supplemen
 
 ## Key methods
 
-### Continuous PINN representation
+### Evolution-level PINN representation
 
-A six-layer MLP (width 256, $\tanh$ activations) takes physical time $t \in [0, T]$ as input and outputs bounded control fields $\Omega(t), \Delta(t)$ and four probe trajectories $\bm r^{(k)}(t)$ simultaneously. The total gate duration $T = e^\tau$ is a learnable scalar optimized jointly with the network parameters.
+A fully connected MLP (three-layer, width 96 for rotation gates; six-layer, width 256 for geometric gates, $\tanh$ activations) takes physical time $t \in [0, T]$ as input and outputs bounded control fields $\Omega(t), \Delta(t)$ and probe/reference trajectories simultaneously. The total gate duration $T = e^\tau$ is a learnable scalar optimized jointly with the network parameters.
 
 Loss terms:
 - **Dynamics loss** $\mathcal{L}_{\rm dyn}$: Bloch-equation residual at collocation points
 - **Gate loss** $\mathcal{L}_{\rm gate}$: channel-matrix reconstruction error from terminal probe states
 - **Time penalty** $\mathcal{L}_T = T$: biases toward shortest compatible duration
 - **Regularization**: amplitude, smoothness, and boundary terms
+- **Path constraints** (geometric gate only): geometricity, cycle closure, purity, orthogonality
 
-### GRAPE-type baseline
+### Piecewise-constant baseline (geometric gate)
 
-Piecewise-constant controls with $N=80$ bins, matrix-exponential propagation, and L-BFGS-B optimization with 5 random restarts per gate. Optimal duration determined by external time scan over 8 candidates.
+Piecewise-constant controls with $N=200$ bins, matrix-exponential propagation, and L-BFGS-B optimization with 5 random restarts. Matched duration $T=1.5$, same sine-envelope and amplitude bounds as the PINN.
 
 ### Validation
 
@@ -142,10 +143,10 @@ All results are validated by **independent RK4 propagation** (4000 steps) with n
 If you use this code, please cite:
 
 ```bibtex
-@article{Du2025ContinuousPhysicsInformed,
-  title   = {Continuous Physics-Informed Representations for Quantum Rotation and Geometric Gates},
+@article{Du2026EvolutionLevel,
+  title   = {Evolution-Level Quantum Optimal Control of Single-Qubit Gates with Physics-Informed Neural Networks},
   author  = {Du, Yao and Cheng, Jian-Jian and Zhang, Lin and Hu, Ming-Liang and Wang, Xingang},
-  year    = {2025},
+  year    = {2026},
   eprint  = {xxxx.xxxxx},
   archivePrefix = {arXiv}
 }
@@ -164,4 +165,4 @@ See [`CITATION.cff`](CITATION.cff) for machine-readable metadata.
 
 ## Acknowledgments
 
-This work was supported by the National Natural Science Foundation of China (NNSFC) under Grant No. 12275165.
+This work was supported by the National Natural Science Foundation of China (Grant Nos. 12275165 and 12275212), the Young Talent Support Program for Doctoral Students of the China Association for Science and Technology (CAST), the Natural Science Foundation of Shaanxi Province (Grant No. 2025JC-YBQN-055), and the Youth Innovation Team of Shaanxi Universities (Grant No. 24JP177).
